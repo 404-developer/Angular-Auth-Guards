@@ -1,0 +1,56 @@
+Auth Guards.ts
+
+import { Injectable } from '@angular/core';
+import { CanActivate, Router } from '@angular/router';
+import { AuthService } from './auth.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthGuard implements CanActivate {
+  constructor(private auth:AuthService, private route:Router){}
+ canActivate():boolean  
+ {
+   if(this.auth.loggedIN()){
+     return true
+   }
+   else{
+     this.route.navigate(['login'])
+     return false
+   }
+ }
+ 
+  
+}
+
+Auth Service.ts
+
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  constructor() { }
+  
+  loggedIN()
+  {
+    return !!localStorage.getItem('token')
+  }
+  
+}
+
+approutingmodule.ts
+
+{
+  path:'dashboard',
+  component:DashboardComponent,
+  canActivate:[AuthGuard]
+
+},
+
+Login.ts
+
+let token=[value.email,value.password]
+      localStorage.setItem('token',JSON.stringify(token))
